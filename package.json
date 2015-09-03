@@ -1,0 +1,14 @@
+{
+  "name": "infovis",
+  "version": "1.0.0",
+  "description": "Visualization for SWEN439",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "pascuaalvi",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
