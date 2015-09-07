@@ -6,9 +6,29 @@ console.log("Loading Index");
 
 var d3 = require("d3");
 
+// Note: ISCED level 3 typically begins between ages 14 to 16
+// Source: http://www.uis.unesco.org/Education/Documents/isced-2011-en.pdf
+//    - Page 38, Section A. Principal Characteristics
+
 // Routes
 router.get('/', function (req, res) {
-  res.render('index');
+  var db = req.db;
+  var fileArray = [];
+
+  db.serialize(function() {
+    var query = "SELECT * from school";
+    db.each(query, function(err, row) {
+      fileArray.push({ schoolid:row.SchoolID, age:row.Age, country: row.Country, iscedl: row.ISCEDL });
+      before = row.id;
+    }, function(){
+      // After thing is done
+      //console.log(fileArray);
+      res.render('index', {
+        data: fileArray
+      });
+    });    
+  });
+    
 });
 
 // Get the files
