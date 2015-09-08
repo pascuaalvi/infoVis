@@ -20,12 +20,12 @@ if (exists) {
 // start crazy
 db.serialize(function() {
   // 1
-  // db.run("CREATE TABLE studentParse (Country TEXT, LevelThree REAL, LevelTwo REAL, LevelOne REAL)");
+  db.run("CREATE TABLE studentParse (Country TEXT, LevelThree REAL, LevelTwo REAL, LevelOne REAL)");
  
-  // var stmt = db.prepare("INSERT INTO studentParse VALUES (?,?,?,?)");
-  // db.each("SELECT distinct Country from student", function(err, row) {
-  //     stmt.run(row.Country,0,0,0);
-  // });
+  var stmt = db.prepare("INSERT INTO studentParse VALUES (?,?,?,?)");
+  db.each("SELECT distinct Country from student", function(err, row) {
+      stmt.run(row.Country,0,0,0);
+  });
  
   // 2
   db.each("SELECT ISCEDL, Country from student", function(err, row) {
