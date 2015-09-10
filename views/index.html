@@ -4,16 +4,24 @@
 		<title>SWEN439 Visualization</title>
 		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 		<script type="text/javascript" src="http://d3js.org/queue.v1.min.js"></script>
-		<script type="text/javascript" src="http://d3js.org/topojson.v0.min.js"></script>
-		
+		<script type="text/javascript" src="http://d3js.org/topojson.v0.min.js"></script>		
 	</head>
 	<body>
-		<p>2012 PISA Visualization</p>
-		<div id="tipper"></div>
-		<div id="vizArea"></div>
-		<script>
-			//var data = [{{ data }}];
-		</script>
+		<div id="navbar">
+			<p>2012 PISA Visualization</p>
+			<ul>
+			  <li style="display: inline;"><a href="default.asp">Home</a></li>
+			  <li style="display: inline;"><a href="news.asp">News</a></li>
+			  <li style="display: inline;"><a href="contact.asp">Contact</a></li>
+			  <li style="display: inline;"><a href="about.asp">About</a></li>
+			</ul>
+		</div>
+		<div id="container" style="width: 100%; overflow: hidden;">
+			<div id="vizArea" style="width: 700px; display: table-cell; border: 2px solid black; float: left"></div>
+			<div id="vizLegend" style="width: 300px; display: table-cell; border: 2px solid black;">
+				<p id="tipper"></p>
+			</div>
+		</div>
 		<script type="text/javascript" src='scripts/main.js'></script>
 	</body>
 </html>

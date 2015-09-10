@@ -18,7 +18,7 @@ if (exists) {
 }
 
 // start crazy
-db.serialize(function() {
+// db.serialize(function() {
   // 1
   db.run("CREATE TABLE studentParse (Country TEXT, LevelThree REAL, LevelTwo REAL, LevelOne REAL)");
  
@@ -48,3 +48,37 @@ db.serialize(function() {
   });
 });
 // end crazy
+
+// start insanity
+
+// db.serialize(function() {
+//   // 1
+//   db.run("CREATE TABLE schoolParse (Country TEXT, LevelThree REAL, LevelTwo REAL, LevelOne REAL)");
+ 
+//   var stmt = db.prepare("INSERT INTO schoolParse VALUES (?,?,?,?)");
+//   db.each("SELECT distinct Country from student", function(err, row) {
+//       stmt.run(row.Country,0,0,0);
+//   });
+ 
+//   // 2
+//   db.each("SELECT ISCEDL, Country from student", function(err, row) {
+//     //console.log(row.ISCEDL + ": " + row.Country);
+//     if(row.ISCEDL === "ISCED level 3"){
+//       console.log("Passed");
+//       db.run("UPDATE schoolParse SET LevelThree = LevelThree + 1 WHERE Country = '"+row.Country+"'");
+//     }
+//     else if(row.ISCEDL === "ISCED level 2"){
+//       console.log("Few Years Behind");
+//       db.run("UPDATE schoolParse SET LevelTwo = LevelTwo + 1 WHERE Country = '"+row.Country+"'");
+//     }
+//     else if(row.ISCEDL === "ISCED level 1"){
+//       console.log("Really Behind");
+//       db.run("UPDATE schoolParse SET LevelOne = LevelOne + 1 WHERE Country = '"+row.Country+"'");
+//     }
+//     else{
+//       console.log("A lost statistic.");
+//     }
+//   });
+// });
+
+// end insanity

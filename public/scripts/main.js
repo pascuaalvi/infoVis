@@ -1,22 +1,19 @@
-
-
+// SETUP CANVAS
 var canvas = d3.select("#vizArea")
 	.append("svg")
-		.attr("width", "700")
-		.attr("height", "700");
+		.attr("width", 700)
+		.attr("height", 700);
 
-//var circle = canvas.append("circle")
-//	.attr("cx",250)
-//	.attr("cy", 300)
-//	.attr("r", 50)
-//	.attr("fill", "red");
-
+// SETUP BORDER
 var circle = canvas.append("rect")
   .attr("x",0)
   .attr("y", 0)
   .attr("width",700)
-  .attr("height", 700);
+  .attr("height", 700)
+  .attr("fill", 'white')
+  .attr("style", 'border: 5px solid red;');
 
+// How to get stuff from database
 HttpClient = function () {
   this.get = function (aUrl, aCallback) {
     var anHttpRequest = new XMLHttpRequest();
@@ -42,30 +39,34 @@ HttpClient = function () {
   }
 }
 
+// Draw Map
 var projection = d3.geo.mercator();
-
-var path = d3.geo.path()
-          .projection(projection);
-
+var path = d3.geo.path().projection(projection);
 var g = canvas.append("g");
-
 var tooltip = canvas.append("div")
     .attr("class", "tooltip");
 
-
+// From Map File
 queue()
     .defer(d3.json, "world-110m2.json")
     .defer(d3.tsv, "world-country-names.tsv")
     .await(ready);
 
-
+// 
 function ready(error, topology, names){
-
 	var countries = topojson.object(topology, topology.objects.countries)
             .geometries;
 
+    var aClient = new HttpClient();
+    
+    aClient.get("/results", function (response) {
+      console.log(response);
+    });
+
     countries.forEach(function(d) { 
-    	d.name = names.filter(function(n) { return d.id == n.id; })[0].name; 
+    	d.name = names.filter(function(n) { return d.id == n.id; })[0].name;
+      d.stats = "1"; 
+      //console.log(d);
   	});
 
     
@@ -77,14 +78,14 @@ function ready(error, topology, names){
             .append("path")
             .attr("title", function(d,i) { return d.name; })
             .attr("d", path)
-            .attr("fill", "rgb(100,100,100)")
+            .attr("fill", "rgb(0,0,0)")
             .attr("class","country");
 
     country
       .on("mousemove", function(d,i) {
         var mouse = d3.mouse(canvas.node()).map( function(d) { return parseInt(d); } );
 
-        d3.select("#tipper").text(d.name);
+        d3.select("#tipper").text("Country: "+d.name);
 
         tooltip
           .classed("hidden", false)

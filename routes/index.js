@@ -12,23 +12,7 @@ var d3 = require("d3");
 
 // Routes
 router.get('/', function (req, res) {
-  var db = req.db;
-  var fileArray = [];
-
-  db.serialize(function() {
-    var query = "SELECT * from school";
-    db.each(query, function(err, row) {
-      fileArray.push({ schoolid:row.SchoolID, age:row.Age, country: row.Country, iscedl: row.ISCEDL });
-      before = row.id;
-    }, function(){
-      // After thing is done
-      //console.log(fileArray);
-      res.render('index', {
-        data: fileArray
-      });
-    });    
-  });
-    
+  res.render('index');      
 });
 
 // Get the files
@@ -72,5 +56,21 @@ router.get('/code', function (req, res) {
 	});
 });
 
+router.get('/results', function (req, res) {
+  var db = req.db;
+  var countryArray = [];
+  var query = "SELECT * FROM studentParse";
+
+  db.serialize(function() {
+    db.each(query, function(err, row) {
+      countryArray.push({ country:row.Country, l3: row.LevelThree, l2: row.LevelTwo, l1: row.LevelOne});
+      console.log(row.Country + " " + row.LevelThree + " "+ row.LevelTwo + " "+ row.LevelOne);
+      before = row.id;
+    }, function(){
+      res.send(countryArray);
+      res.end();
+    });    
+  });      
+});
 
 module.exports = router;
