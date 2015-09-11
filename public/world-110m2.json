@@ -923,15 +923,6 @@
           ]
         },
         {
-          "type":"Polygon",
-          "id":260,
-          "arcs":[
-            [
-              327
-            ]
-          ]
-        },
-        {
           "type":"MultiPolygon",
           "id":36,
           "arcs":[

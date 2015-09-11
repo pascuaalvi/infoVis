@@ -1,14 +1,14 @@
 // SETUP CANVAS
 var canvas = d3.select("#vizArea")
 	.append("svg")
-		.attr("width", 700)
+		.attr("width", 1000)
 		.attr("height", 700);
 
 // SETUP BORDER
-var circle = canvas.append("rect")
+var rect = canvas.append("rect")
   .attr("x",0)
   .attr("y", 0)
-  .attr("width",700)
+  .attr("width",1000)
   .attr("height", 700)
   .attr("fill", 'white')
   .attr("style", 'border: 5px solid red;');
@@ -112,8 +112,7 @@ function ready(error, topology, names){
           // Notify user with hovered thing
           $("#tipper").empty();
           $("#success").empty();
-          $("#failure").empty();
-          $("#tipper").append("<b>Country: </b> "+d.name)     
+          $("#failure").empty();  
 
           // Get all pisa results
           if(d.three !== undefined
@@ -122,11 +121,11 @@ function ready(error, topology, names){
             var total = d.three + d.two + d.one;
             var success = Math.round((d.three/total)*100);
             var failure = Math.round(((d.two+d.one)/total)*100);
-            $("#success").append("<b style='color:green;font-size: 250%;'>"+success+"%</b> of students surveyed are on the ISCED standard");
-            $("#failure").append("<b style='color:red;font-size: 250%;'>"+failure+"%</b> of students surveyed are below the ISCED standard");
-            $("#countrySelect").val(d.name);
+            $("#success").append("<b style='color:green;font-size: 250%;'>"+success+"%</b> of students surveyed <br> in <b>"+d.name+"</b><br> <b>comply</b> with the ISCED standard");
+            $("#failure").append("<b style='color:red;font-size: 250%;'>"+failure+"%</b> of students surveyed <br> in <b>"+d.name+"</b><br> are <b>below</b> the ISCED standard");
           }
           else{
+            $("#tipper").append("<b>"+d.name+ "</b> was not surveyed by PISA 2012");
             d3.select("#success").text("");
             d3.select("#failure").text("");
           }
@@ -140,7 +139,8 @@ function ready(error, topology, names){
           tooltip.classed("hidden", true)
         })
         .on("click", function(d) { 
-            goToNextViz(d.name);
+          $("#countrySelect").val(d.name);
+            //goToNextViz(d.name);
         });
 
     });
