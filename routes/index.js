@@ -5,6 +5,7 @@ var router = express.Router();
 console.log("Loading Index");
 
 var d3 = require("d3");
+var $ = require("jquery");
 
 // Note: ISCED level 3 typically begins between ages 14 to 16
 // Source: http://www.uis.unesco.org/Education/Documents/isced-2011-en.pdf
@@ -58,13 +59,13 @@ router.get('/code', function (req, res) {
 
 router.get('/results', function (req, res) {
   var db = req.db;
-  var countryArray = [];
+  var countryArray = {};
   var query = "SELECT * FROM studentParse";
 
   db.serialize(function() {
     db.each(query, function(err, row) {
-      countryArray.push({ country:row.Country, l3: row.LevelThree, l2: row.LevelTwo, l1: row.LevelOne});
-      console.log(row.Country + " " + row.LevelThree + " "+ row.LevelTwo + " "+ row.LevelOne);
+      countryArray[row.Country] = {l3: row.LevelThree, l2: row.LevelTwo, l1: row.LevelOne};
+      //console.log(row.Country + " " + row.LevelThree + " "+ row.LevelTwo + " "+ row.LevelOne);
       before = row.id;
     }, function(){
       res.send(countryArray);

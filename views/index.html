@@ -4,13 +4,13 @@
 		<title>SWEN439 Visualization</title>
 		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 		<script type="text/javascript" src="http://d3js.org/queue.v1.min.js"></script>
-		<script type="text/javascript" src="http://d3js.org/topojson.v0.min.js"></script>		
+		<script type="text/javascript" src="http://d3js.org/topojson.v0.min.js"></script>
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>		
 	</head>
 	<body>
 		<div id="navbar">
-			<p>2012 PISA Visualization</p>
 			<ul>
-			  <li style="display: inline;"><a href="default.asp">Home</a></li>
+			  <li style="display: inline;"><a href="/">Home</a></li>
 			  <li style="display: inline;"><a href="news.asp">News</a></li>
 			  <li style="display: inline;"><a href="contact.asp">Contact</a></li>
 			  <li style="display: inline;"><a href="about.asp">About</a></li>
@@ -18,8 +18,11 @@
 		</div>
 		<div id="container" style="width: 100%; overflow: hidden;">
 			<div id="vizArea" style="width: 700px; display: table-cell; border: 2px solid black; float: left"></div>
-			<div id="vizLegend" style="width: 300px; display: table-cell; border: 2px solid black;">
-				<p id="tipper"></p>
+			<div id="vizLegend" style="width: 400px; display: table-cell; border: 2px solid black;">
+				<p id="tipper">No Country Selected</p>
+				<p id="success"></p>
+				<p id="failure"></p>
+				<input id="countrySelect" type="hidden"></input>
 			</div>
 		</div>
 		<script type="text/javascript" src='scripts/main.js'></script>
