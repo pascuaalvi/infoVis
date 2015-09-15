@@ -73,23 +73,25 @@ function ready(error, topology, names){
           console.log("Total: "+successPercent+"%");
 
           if(successPercent > 0.80){
-            d.stats = "rgb(20,20,120)";
+            d.stats = "rgb(0,255,0)";
           }
           else if(successPercent > 0.60){
-            d.stats = "rgb(40,40,140)";
+            d.stats = "rgb(60,210,0)";
           }
           else if(successPercent > 0.40){
-            d.stats = "rgb(60,60,160)";
+            d.stats = "rgb(110,150,0)";
           }
           else if(successPercent > 0.20){
-            d.stats = "rgb(100,100,200)";
+            d.stats = "rgb(160,100,0)";
           }
           else{
-            d.stats = "rgb(150,150,250)";
+            d.stats = "rgb(210,50,0)";
           }
+          d.stroke = "white";
         }
         else{
-          d.stats = "rgb(0,0,0)"
+          d.stats = "rgb(100,100,100)";
+          d.stroke = "white";
         }        
       });
 
@@ -100,6 +102,7 @@ function ready(error, topology, names){
       country
           .enter()
               .append("path")
+              .attr("stroke", function(d,i) { return d.stroke; })
               .attr("title", function(d,i) { return d.name; })
               .attr("d", path)
               .attr("fill", function(d,i) { return d.stats; })
@@ -121,8 +124,8 @@ function ready(error, topology, names){
             var total = d.three + d.two + d.one;
             var success = Math.round((d.three/total)*100);
             var failure = Math.round(((d.two+d.one)/total)*100);
-            $("#success").append("<b style='color:green;font-size: 250%;'>"+success+"%</b> of students surveyed <br> in <b>"+d.name+"</b><br> <b>comply</b> with the ISCED standard");
-            $("#failure").append("<b style='color:red;font-size: 250%;'>"+failure+"%</b> of students surveyed <br> in <b>"+d.name+"</b><br> are <b>below</b> the ISCED standard");
+            $("#success").append("<b style='color:green;font-size: 250%;'>"+success+"%</b> of students surveyed <br> in <b>"+d.name+"</b><br> are academically <b>on track</b>, according to the ISCED standard");
+            $("#failure").append("<b style='color:red;font-size: 250%;'>"+failure+"%</b> of students surveyed <br> in <b>"+d.name+"</b><br> are academically <b>behind</b>, according to the ISCED standard");
           }
           else{
             $("#tipper").append("<b>"+d.name+ "</b> was not surveyed by PISA 2012");
