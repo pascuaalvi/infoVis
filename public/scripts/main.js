@@ -42,7 +42,12 @@ HttpClient = function () {
 // Draw Map
 var projection = d3.geo.mercator();
 var path = d3.geo.path().projection(projection);
+
 var g = canvas.append("g");
+g.attr("transform","translate(10,188)scale(1)");
+g.selectAll("path")  
+            .attr("d", path.projection(projection));
+
 var tooltip = canvas.append("div")
     .attr("class", "tooltip");
 
@@ -148,15 +153,20 @@ function ready(error, topology, names){
 
     });
 }
-      
-   
+
 // zoom and pan
 var zoom = d3.behavior.zoom()
     .on("zoom",function() {
+        var coord = d3.event.translate;
+        var x = coord[0] + 10;
+        var y = coord[1] + 188;
+        var newCoord = [x,y];
+
         g.attr("transform","translate("+ 
-            d3.event.translate.join(",")+")scale("+d3.event.scale+")");
+            coord.join(",")+")scale("+d3.event.scale+")");
         g.selectAll("path")  
-            .attr("d", path.projection(projection)); 
+            .attr("d", path.projection(projection));     
+
   });
 canvas.call(zoom)
 
