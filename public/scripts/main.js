@@ -4,9 +4,11 @@ var canvas = d3.select("#vizArea")
 		.attr("width", 1000)
 		.attr("height", 700);
 
-document.getElementById("vizArea").oncontextmenu = function() {
+var vizArea = document.getElementById("vizArea");
+
+vizArea.oncontextmenu = function() {
      return false;  
-} 
+}
 
 // SETUP BORDER
 var rect = canvas.append("rect")
@@ -152,8 +154,12 @@ function ready(error, topology, names){
           tooltip.classed("hidden", true)
         })
         .on("click", function(d) { 
-          $("#countrySelect").val(d.name);
-            goToNextViz(d.name);
+          if(d.three !== undefined
+            && d.two !== undefined
+            && d.one !== undefined){ 
+            $("#countrySelect").val(d.name);
+              goToNextViz(d.name);
+            }
         });
 
     });
