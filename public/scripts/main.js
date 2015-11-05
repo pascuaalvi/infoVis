@@ -1,24 +1,14 @@
 // SETUP CANVAS
 var canvas = d3.select("#vizArea")
 	.append("svg")
-		.attr("width", 1000)
-		.attr("height", 700);
+		.attr("width", "100%")
+		.attr("height", "100%");
 
 var vizArea = document.getElementById("vizArea");
 
 vizArea.oncontextmenu = function() {
      return false;  
 }
-
-// SETUP BORDER
-var rect = canvas.append("rect")
-  .attr("x",0)
-  .attr("y", 0)
-  .attr("width",1000)
-  .attr("height", 700)
-  .attr("fill", 'white')
-  .attr("style", 'border: 5px solid red;');
-
 
 // How to get stuff from database
 HttpClient = function () {
@@ -51,7 +41,7 @@ var projection = d3.geo.mercator();
 var path = d3.geo.path().projection(projection);
 
 var g = canvas.append("g");
-g.attr("transform","translate(10,188)scale(1)");
+g.attr("transform","translate(-18,190)scale(1)");
 g.selectAll("path")  
             .attr("d", path.projection(projection));
 
@@ -82,7 +72,7 @@ function ready(error, topology, names){
           d.one = country.l1;
           var total = d.three + d.two + d.one
           var successPercent = d.three/total;
-          console.log("Total: "+successPercent+"%");
+          //console.log("Total: "+successPercent+"%");
 
           if(successPercent > 0.80){
             d.stats = "rgb(0,255,0)";
@@ -136,8 +126,8 @@ function ready(error, topology, names){
             var total = d.three + d.two + d.one;
             var success = Math.round((d.three/total)*100);
             var failure = Math.round(((d.two+d.one)/total)*100);
-            $("#success").append("<b style='color:green;font-size: 250%;'>"+success+"%</b> of students surveyed <br> in <b>"+d.name+"</b><br> are academically <b>on track</b>, according to the ISCED standard");
-            $("#failure").append("<b style='color:red;font-size: 250%;'>"+failure+"%</b> of students surveyed <br> in <b>"+d.name+"</b><br> are academically <b>behind</b>, according to the ISCED standard");
+            $("#success").append("<b style='color:green;font-size: 250%;'>"+success+"%</b> of students surveyed by PISA 2012 <br> in <b>"+d.name.replace( /The/g, "" )+"</b> are academically <b>on track</b>");
+            $("#failure").append("<b style='color:red;font-size: 250%;'>"+failure+"%</b> of students surveyed by PISA 2012 <br> in <b>"+d.name.replace( /The/g, "" )+"</b> are academically <b>behind</b>");
           }
           else{
             $("#tipper").append("<b>"+d.name+ "</b> was not surveyed by PISA 2012");
@@ -173,8 +163,8 @@ var zoom = d3.behavior.zoom()
     .on("zoom",function() {
         var coord = d3.event.translate;
         if(pastScale == d3.event.scale || initial){
-          var x = coord[0] + 10;
-          var y = coord[1] + 188;
+          var x = coord[0] + -18;
+          var y = coord[1] + 190;
           coord = [x,y];
           initial = false;
         }

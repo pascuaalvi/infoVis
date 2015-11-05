@@ -1,16 +1,19 @@
+$( document ).ready(function(){
+	var country = $("#countryName")[0].innerText;
+
+console.log(country)
+
+var canvas = d3.select("#vizButton")
+	.append("svg")
+		.attr("id","svg_area")
+		.attr("width", "100%")
+		.attr("height", "100%");
+
 var canvas = d3.select("#vizArea")
 	.append("svg")
-		.attr("width", 1000)
-		.attr("height", 700);
-
-// SETUP BORDER
-var rect = canvas.append("rect")
-  .attr("x",0)
-  .attr("y", 0)
-  .attr("width",1000)
-  .attr("height", 700)
-  .attr("fill", 'white')
-  .attr("style", 'border: 5px solid red;');
+		.attr("id","svg_area")
+		.attr("width", "100%")
+		.attr("height", "100%");
 
 // How to get stuff from database
 HttpClient = function () {
@@ -37,3 +40,14 @@ HttpClient = function () {
     http.send(params);
   }
 }
+
+// Build buttons
+
+
+function boysXgirls(){	
+	var vis = d3.select("#svg_area"); var arc = d3.svg.arc() .innerRadius(50) .outerRadius(100) .startAngle() .endAngle(-0.15*Math.PI);
+	vis.append("path") .attr("d", arc) .attr("transform", "translate(300,200)");
+}
+
+});
+
