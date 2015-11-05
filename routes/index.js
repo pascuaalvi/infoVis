@@ -33,4 +33,14 @@ router.get('/results', function (req, res) {
   });      
 });
 
+router.get('/details/:country', function (req, res) {
+  var country = ""+req.params.country;
+  if(country != ""){
+    res.render('details', {
+        title: 'PISA Data: '+country,
+        countrySelected: country
+      });
+  }   
+});
+
 module.exports = router;

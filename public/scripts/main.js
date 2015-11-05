@@ -4,6 +4,10 @@ var canvas = d3.select("#vizArea")
 		.attr("width", 1000)
 		.attr("height", 700);
 
+document.getElementById("vizArea").oncontextmenu = function() {
+     return false;  
+} 
+
 // SETUP BORDER
 var rect = canvas.append("rect")
   .attr("x",0)
@@ -12,6 +16,7 @@ var rect = canvas.append("rect")
   .attr("height", 700)
   .attr("fill", 'white')
   .attr("style", 'border: 5px solid red;');
+
 
 // How to get stuff from database
 HttpClient = function () {
@@ -148,19 +153,25 @@ function ready(error, topology, names){
         })
         .on("click", function(d) { 
           $("#countrySelect").val(d.name);
-            //goToNextViz(d.name);
+            goToNextViz(d.name);
         });
 
     });
 }
 
+var pastScale = 1;
+var initial = true;
+
 // zoom and pan
 var zoom = d3.behavior.zoom()
     .on("zoom",function() {
         var coord = d3.event.translate;
-        var x = coord[0] + 10;
-        var y = coord[1] + 188;
-        var newCoord = [x,y];
+        if(pastScale == d3.event.scale || initial){
+          var x = coord[0] + 10;
+          var y = coord[1] + 188;
+          coord = [x,y];
+          initial = false;
+        }
 
         g.attr("transform","translate("+ 
             coord.join(",")+")scale("+d3.event.scale+")");
@@ -172,5 +183,5 @@ canvas.call(zoom)
 
 
 function goToNextViz(name){
-	window.location = "/nextStep?country="+name;
+	window.location = "/details/"+name;
 }
