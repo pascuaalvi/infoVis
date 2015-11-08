@@ -17,114 +17,9 @@ if (exists) {
   console.log("DB not found!");
 }
 
-// start crazy
-// db.serialize(function() {
-//   // 1
-//   db.run("CREATE TABLE studentParse (Country TEXT, LevelThree REAL, LevelTwo REAL, LevelOne REAL)");
- 
-//   var stmt = db.prepare("INSERT INTO studentParse VALUES (?,?,?,?)");
-//   db.each("SELECT distinct Country from student", function(err, row) {
-//       stmt.run(row.Country,0,0,0);
-//   });
- 
-//   // 2
-//   db.each("SELECT ISCEDL, Country from student", function(err, row) {
-//     //console.log(row.ISCEDL + ": " + row.Country);
-//     if(row.ISCEDL === "ISCED level 3"){
-//       console.log("Passed");
-//       db.run("UPDATE studentParse SET LevelThree = LevelThree + 1 WHERE Country = '"+row.Country+"'");
-//     }
-//     else if(row.ISCEDL === "ISCED level 2"){
-//       console.log("Few Years Behind");
-//       db.run("UPDATE studentParse SET LevelTwo = LevelTwo + 1 WHERE Country = '"+row.Country+"'");
-//     }
-//     else if(row.ISCEDL === "ISCED level 1"){
-//       console.log("Really Behind");
-//       db.run("UPDATE studentParse SET LevelOne = LevelOne + 1 WHERE Country = '"+row.Country+"'");
-//     }
-//     else{
-//       console.log("A lost statistic.");
-//     }
-//   });
-// });
-// end crazy
-
 var countries = [];
-/*
-var SportsPassed = 0;
-var SportsFailed = 0;
-var NoSportsPassed = 0;
-var NoSportsFailed = 0;
-
-var ArtsPassed = 0;
-var ArtsFailed = 0;
-var NoArtsPassed = 0;
-var NoSportsFailed = 0;
-
-var PrivatePassed = 0;
-var PrivateFailed = 0;
-var PublicPassed = 0;
-var PublicFailed = 0;
-
-var CoedPassed = 0;
-var CoedFailed = 0;
-var NotCoedPassed = 0;
-var NotCoedFailed = 0;
-
-var SmallTownPassed = 0;
-var SmallTownFailed = 0;
-var CityPassed = 0;
-var CityFailed = 0;
-var VillagePassed = 0;
-var TownPassed = 0;
-var TownFailed = 0;
-var LargeCityPassed = 0;
-var LargeCityFailed = 0;
-*/
-
-// start insanity
 
 db.serialize(function() {
-  /*
-  // 1
-  db.run("CREATE TABLE sportsParse (Country TEXT PRIMARY KEY, "
-    +"SportsPassed REAL, SportsFailed REAL, NoSportsPassed REAL, NoSportsFailed REAL"
-    +")");
-
-  db.run("CREATE TABLE artsParse (Country TEXT PRIMARY KEY, "
-    +"ArtsPassed REAL, ArtsFailed REAL, NoArtsPassed REAL, NoArtsFailed REAL"
-    +")");
-
-  db.run("CREATE TABLE typeParse (Country TEXT PRIMARY KEY, "
-    +"PrivatePassed REAL, PrivateFailed REAL, PublicPassed REAL, PublicFailed REAL"
-    +")");
-
-  db.run("CREATE TABLE genderParse (Country TEXT PRIMARY KEY, "
-  +"CoedPassed REAL, CoedFailed REAL, NotCoedPassed REAL, NotCoedFailed REAL"
-  +")");
-
-  db.run("CREATE TABLE locationParse (Country TEXT PRIMARY KEY, "
-  +"SmallTownPassed REAL, SmallTownFailed REAL,"
-  +"CityPassed REAL, CityFailed REAL,"
-  +"VillagePassed REAL, VillageFailed REAL,"
-  +"TownPassed REAL, TownFailed REAL,"
-  +"LargeCityPassed REAL, LargeCityFailed REAL"
-  +")");
-
-  var stmt = db.prepare("INSERT INTO sportsParse VALUES (?,?,?,?,?)");
-  var stmt2 = db.prepare("INSERT INTO artsParse VALUES (?,?,?,?,?)");
-  var stmt3 = db.prepare("INSERT INTO typeParse VALUES (?,?,?,?,?)");
-  var stmt4 = db.prepare("INSERT INTO genderParse VALUES (?,?,?,?,?)");
-  var stmt5 = db.prepare("INSERT INTO locationParse VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-
-  db.each("SELECT distinct Country from students", function(err, row) {
-      stmt.run(row.Country,0,0,0,0);
-      stmt2.run(row.Country,0,0,0,0);
-      stmt3.run(row.Country,0,0,0,0);
-      stmt4.run(row.Country,0,0,0,0);
-      stmt5.run(row.Country,0,0,0,0,0,0,0,0,0,0);
-  });
-  */
 
   db.each("SELECT distinct Country from students", function(err, row) {
     countries[row.Country] = {
@@ -135,7 +30,9 @@ db.serialize(function() {
         "ArtsPassed" : 0,
         "ArtsFailed" : 0,
         "NoArtsPassed" : 0,
+        "NoArtsFailed" : 0,
         "NoSportsFailed" : 0,
+        "NoSportsPassed" : 0,
         "PrivatePassed" : 0,
         "PrivateFailed" : 0,
         "PublicPassed" : 0,
@@ -149,15 +46,18 @@ db.serialize(function() {
         "CityPassed" : 0,
         "CityFailed" : 0,
         "VillagePassed" : 0,
+        "VillageFailed": 0,
         "TownPassed" : 0,
         "TownFailed" : 0,
         "LargeCityPassed" : 0,
         "LargeCityFailed" : 0,        
         };
-      }, function(){;
-
-        db.each("select country, iscedl, schoolType, schoolLocation, arts, sports, girls, boys from school2012 inner join students on school2012.SCHOOLID = students.SchoolID and school2012.CNT = students.Country", function(err, row) {
-          console.log(row);
+      }, function(){
+        // countries["Vietnam"]["SmallTownPassed"] += 1
+        //console.log(countries);
+       
+        db.each("select country, iscedl, schoolType, schoolLocation, arts, sports, girls, boys from school2012 inner join students on school2012.SCHOOLID = students.SchoolID and school2012.CNT = students.Country", 
+          function(err, row) {
           var invalid = false;
           var passed = false;
           if(row.ISCEDL === "ISCED level 3"){
@@ -290,150 +190,78 @@ db.serialize(function() {
               }
             }
           }
+        }, function(){
+          db.each("SELECT distinct Country from students", function(err, row) {
+
+            db.run("UPDATE sportsParse SET SportsPassed = "+countries[row.Country]["SportsPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE sportsParse SET SportsFailed = "+countries[row.Country]["SportsFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE sportsParse SET NoSportsPassed = "+countries[row.Country]["NoSportsPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE sportsParse SET NoSportsFailed = "+countries[row.Country]["NoSportsFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+
+            db.run("UPDATE artsParse SET ArtsPassed = "+countries[row.Country]["ArtsPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE artsParse SET ArtsFailed = "+countries[row.Country]["ArtsFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE artsParse SET NoArtsPassed = "+countries[row.Country]["NoArtsPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE artsParse SET NoArtsFailed = "+countries[row.Country]["NoArtsFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+
+            db.run("UPDATE artsParse SET ArtsPassed = "+countries[row.Country]["ArtsPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE artsParse SET ArtsFailed = "+countries[row.Country]["ArtsFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE artsParse SET NoArtsPassed = "+countries[row.Country]["NoArtsPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE artsParse SET NoArtsFailed = "+countries[row.Country]["NoArtsFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+
+            db.run("UPDATE typeParse SET PrivatePassed = "+countries[row.Country]["PrivatePassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE typeParse SET PrivateFailed = "+countries[row.Country]["PrivateFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE typeParse SET PublicPassed = "+countries[row.Country]["PublicPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE typeParse SET PublicFailed = "+countries[row.Country]["PublicFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+
+            db.run("UPDATE genderParse SET NotCoedPassed = "+countries[row.Country]["NotCoedPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE genderParse SET NotCoedFailed = "+countries[row.Country]["NotCoedFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE genderParse SET CoedPassed = "+countries[row.Country]["CoedPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE genderParse SET CoedFailed = "+countries[row.Country]["CoedFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+
+            db.run("UPDATE locationParse SET SmallTownPassed = "+countries[row.Country]["SmallTownPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE locationParse SET SmallTownFailed = "+countries[row.Country]["SmallTownFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE locationParse SET CityPassed = "+countries[row.Country]["CityPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE locationParse SET CityFailed = "+countries[row.Country]["CityFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE locationParse SET VillagePassed = "+countries[row.Country]["VillagePassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE locationParse SET VillageFailed = "+countries[row.Country]["VillageFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE locationParse SET TownPassed = "+countries[row.Country]["TownPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE locationParse SET TownFailed = "+countries[row.Country]["TownFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE locationParse SET LargeCityPassed = "+countries[row.Country]["LargeCityPassed"]+
+              " WHERE Country = '"+row.Country+"'");
+            db.run("UPDATE locationParse SET LargeCityFailed = "+countries[row.Country]["LargeCityFailed"]+
+              " WHERE Country = '"+row.Country+"'");
+
+          }, function(){
+            console.log(countries);
+          });
         });
-
-      }, function(){
-        console.log(countries);
       });
-
-
-  // // 2
-  // db.each("select country, iscedl, schoolType, schoolLocation, arts, sports, girls, boys from school2012 inner join students on school2012.SCHOOLID = students.SchoolID and school2012.CNT = students.Country", function(err, row) {
-  //   console.log(row);
-  //   var invalid = false;
-  //   var passed = false;
-  //   if(row.ISCEDL === "ISCED level 3"){
-  //     passed = true;
-  //     //db.run("UPDATE detailParse SET LevelThree = LevelThree + 1 WHERE Country = '"+row.Country+"'");
-  //   }
-  //   else if(row.ISCEDL === "ISCED level 2" || row.ISCEDL === "ISCED level 1"){
-  //     passed = false;
-  //     //db.run("UPDATE detailParse SET LevelTwo = LevelTwo + 1 WHERE Country = '"+row.Country+"'");
-  //   }
-  //   else{
-  //     invalid = true;
-  //   }
-    
-  //   if(!invalid){
-        
-  //     // Location
-  //     if(row.SchoolLocation === "Small Town"){
-  //       if(passed){
-  //         SmallTownPassed = SmallTownPassed + 1 ;
-  //       }
-  //       else{
-  //         SmallTownFailed = SmallTownFailed + 1 ;
-  //       }
-  //     }
-  //     else if(row.SchoolLocation === "Town"){
-  //       if(passed){
-  //         TownPassed = TownPassed + 1 ;
-  //       }
-  //       else{
-  //         TownFailed = TownFailed + 1 ;
-  //       }
-  //     }
-  //     else if(row.SchoolLocation === "Village"){
-  //       if(passed){
-  //         VillagePassed = VillagePassed + 1 ;
-  //       }
-  //       else{
-  //         VillageFailed = VillageFailed + 1 ;
-  //       }
-  //     }
-  //     else if(row.SchoolLocation === "City"){
-  //       if(passed){
-  //         CityPassed = CityPassed + 1 ;
-  //       }
-  //       else{
-  //         CityFailed = CityFailed + 1 ;
-  //       }
-  //     }
-  //     else if(row.SchoolLocation === "Large City"){
-  //       if(passed){
-  //         LargeCityPassed = LargeCityPassed + 1;
-  //       }
-  //       else{
-  //         LargeCityFailed = LargeCityFailed + 1;
-  //       }
-  //     }
-
-  //     // Type
-  //     if(row.SchoolType === "Private"){
-  //       if(passed){
-  //         PrivatePassed = PrivatePassed + 1 ;
-  //       }
-  //       else{
-  //         PrivateFailed = PrivateFailed + 1 ;
-  //       }
-  //     }
-  //     else if(row.SchoolType === "Public"){
-  //       if(passed){
-  //         PublicPassed = PublicPassed + 1 ;
-  //       }
-  //       else{
-  //         PublicFailed = PublicFailed + 1 ;
-  //       }
-  //     }
-
-  //     // Gender
-  //     if(row.Boys !== null && row.Girls !== null){
-  //       if(row.Boys !== 0 && row.Girls !== 0){
-  //         if(passed){
-  //           genderParse SET CoedPassed = CoedPassed + 1 ;
-  //         }
-  //         else{
-  //           enderParse SET CoedFailed = CoedFailed + 1 ;
-  //         }
-  //       } 
-  //       else if(row.Boys === 0 || row.Girls === 0){
-  //         if(passed){
-  //           genderParse SET NotCoedPassed = NotCoedPassed + 1 ;
-  //         }
-  //         else{
-  //           genderParse SET NotCoedFailed = NotCoedFailed + 1 ;
-  //         }
-  //       } 
-  //     }
-
-  //     // Sports
-  //     if(row.Sports === "Yes"){
-  //       if(passed){
-  //         SportsPassed += 1;
-  //       }
-  //       else{
-  //         SportsFailed += 1;
-  //       }
-  //     }
-  //     else if(row.Sports === "No"){
-  //       if(passed){
-  //         NoSportsPassed += 1;
-  //       }
-  //       else{
-  //         NoSportsFailed += 1;
-  //       }
-  //     }
-
-  //     //Arts
-  //     if(row.Arts === "Yes"){
-  //       if(passed){
-  //         ArtsPassed += 1;
-  //       }
-  //       else{
-  //         ArtsFailed += 1;
-  //       }
-  //     }
-  //     else if(row.Arts === "No"){
-  //       if(passed){
-  //         NoArtsPassed += 1;
-  //       }
-  //       else{
-  //         NoArtsFailed += 1;
-  //       }
-  //     }
-  //   }
-  // });
-
 });
-
-// end insanity

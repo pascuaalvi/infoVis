@@ -11,8 +11,20 @@
 	<body>
 		<div id="container" style="width: 100%; overflow: hidden;">
 			<h1 id="countryName" style ="height: 20%">{{countrySelected}}</h1>
-			<div id="vizButtons" style="width: 45.5%; height: 625px; display: table-cell; float: left"></div>
-			<div id="vizArea" style="width: 35.5%; height: 625px; display: table-cell;"></div>
+			<div id="vizButtons" style="width: 25.5%; height: 625px; display: table-cell; float: left">
+				<br>
+				<input type="button" value="Co-Ed vs Segregated Schools" onclick="gender()">
+				<br><br>
+				<input type="button" value="Private vs Public Schools" onclick="msg()">
+				<br><br>
+				<input type="button" value="Urban vs Rural Schools" onclick="msg()">
+				<br><br>
+				<input type="button" value="Effect of Sports Presence" onclick="msg()">
+				<br><br>
+				<input type="button" value="Effect of Arts Presence" onclick="msg()">
+				<br><br>
+			</div>
+			<div id="vizArea" style="width: 70.5%; height: 625px; display: table-cell;"></div>
 		</div>
 	</body>
 </html>

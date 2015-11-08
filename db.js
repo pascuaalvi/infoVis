@@ -92,9 +92,12 @@ db.serialize(function() {
   //     stmt5.run(row.Country,0,0,0,0,0,0,0,0,0,0);
   // });
 
-
   // 2
-  db.each("SELECT * from parseEverything", function(err, row) {
+  db.each("SELECT ISCEDL, Country, Boys, Girls, SchoolLocation, SchoolType, Sports, Arts "
+    +"from school2012 inner join students "
+    +"on school2012.SCHOOLID = students.SchoolID and school2012.CNT = students.Country", function(err, row) {
+
+    console.log(row);
     var invalid = false;
     var passed = false;
     if(row.ISCEDL === "ISCED level 3"){
@@ -108,7 +111,7 @@ db.serialize(function() {
     else{
       invalid = true;
     }
-    
+
     if(!invalid){
         
       // Location
@@ -213,27 +216,26 @@ db.serialize(function() {
       if(row.Arts === "Yes"){
         if(passed){
           db.run("UPDATE artsParse SET ArtsPassed = ArtsPassed + 1 WHERE Country = '"+row.Country+"'");
-          console.log("Pass Yes")
         }
         else{
           db.run("UPDATE artsParse SET ArtsFailed = ArtsFailed + 1 WHERE Country = '"+row.Country+"'");
-          console.log("Fail Yes")
 
         }
       }
       else if(row.Arts === "No"){
         if(passed){
           db.run("UPDATE artsParse SET NoArtsPassed = NoArtsPassed + 1 WHERE Country = '"+row.Country+"'");
-          console.log("Pass No")
 
         }
         else{
           db.run("UPDATE artsParse SET NoArtsFailed = NoArtsFailed + 1 WHERE Country = '"+row.Country+"'");
-          console.log("Fail No")
 
         }
       }
+
+
     }
+
   });
 });
 

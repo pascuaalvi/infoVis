@@ -33,6 +33,61 @@ router.get('/results', function (req, res) {
   });      
 });
 
+router.get('/data', function (req, res) {
+  // Name of country to extract
+  var country = ""+req.query.country;
+  // Either: arts, sports, gender, location, type 
+  var context = ""+req.query.context;
+
+  if(country != "" && context != ""){
+    var db = req.db;
+    var countrydata = {};
+    var query = "SELECT * FROM "+context+"Parse where Country = "+country;
+    console.log(query)
+
+    db.serialize(function() {
+
+      db.each(query, function(err, row) {
+
+        if(context === "gender"){
+          countrydata = {cp: row.CoedPassed, cf: row.CoedFailed, ncp: row.NotCoedPassed, ncf: row.NotCoedFailed};
+        }
+        else if(context === "sports"){
+          countrydata = {sp: row.SportsPassed, sf: row.SportsFailed, nsp: row.NoSportsPassed, nsf: row.NoSportsFailed};
+        }
+        else if(context === "arts"){
+          countrydata = {ap: row.ArtsPassed, af: row.ArtsFailed, nap: row.NoArtsPassed, naf: row.NoArtsFailed};
+        }
+        else if(context === "type"){
+          countrydata = {pPublic: row.PublicPassed, fPublic: row.PublicFailed, pPrivate: row.PrivatePassed, fPrivate: row.PrivateFailed};
+        }
+        else if(context === "location"){
+          countrydata = {
+            cp: row.SmallTownPassed, 
+            cf: row.SmallTownFailed, 
+            ncp: row.CityPassed, 
+            ncf: row.CityFailed,
+            cp: row.VillagePassed, 
+            cf: row.VillageFailed, 
+            ncp: row.CityPassed, 
+            ncf: row.CityFailed,            
+            cp: row.TownPassed, 
+            cf: row.TownFailed, 
+            ncp: row.LargeCityPassed, 
+            ncf: row.LargeCityFailed
+          };
+        }
+
+      }, function(){
+        res.send(countrydata);
+        res.end();
+      });    
+
+    });  
+  }    
+
+});
+
 router.get('/details/:country', function (req, res) {
   var country = ""+req.params.country;
   if(country != ""){

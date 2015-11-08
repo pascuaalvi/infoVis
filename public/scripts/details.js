@@ -1,5 +1,6 @@
 $( document ).ready(function(){
-	var country = $("#countryName")[0].innerText;
+
+  var country = $("#countryName")[0].innerText;
 
   console.log(country)
 
@@ -8,14 +9,9 @@ $( document ).ready(function(){
   		.attr("id","svg_area")
   		.attr("width", "100%")
   		.attr("height", "100%");
+});
 
-  var canvas = d3.select("#vizArea")
-  	.append("svg")
-  		.attr("id","svg_area")
-  		.attr("width", "100%")
-  		.attr("height", "100%");
-
-  // How to get stuff from database
+// How to get stuff from database
   HttpClient = function () {
     this.get = function (aUrl, aCallback) {
       var anHttpRequest = new XMLHttpRequest();
@@ -41,12 +37,77 @@ $( document ).ready(function(){
     }
   }
 
-  // Build buttons
+function gender(){  
+  var country = $("#countryName")[0].innerText;
+  var vis = d3.select("#vizArea").selectAll("*").remove(); 
+  var aClient = new HttpClient();
 
+  var width = 800,
+    height = 250,
+    radius = Math.min(width, height) / 2;
 
-  function boysXgirls(){	
-  	var vis = d3.select("#svg_area"); var arc = d3.svg.arc() .innerRadius(50) .outerRadius(100) .startAngle() .endAngle(-0.15*Math.PI);
-  	vis.append("path") .attr("d", arc) .attr("transform", "translate(300,200)");
-  }
+  aClient.get("/data?country='"+country+"'&context=gender", function (response) {
+    
+    var array = JSON.parse(response);
 
-});
+    var total = response.cp + response.cf + response.ncp + response.ncf;
+    
+    var cp = array["cp"];
+    var cf = array["cf"];
+    var ncp = array["ncp"];
+    var ncf = array["ncf"];
+
+    var data = [
+    {"context":"Coed School - Passed","tally":  cp},
+    {"context":"Coed School - Failed","tally": cf},
+    {"context":"Segregated School - Passed","tally": ncp},
+    {"context":"Segregated School - Failed","tally": ncf}
+    ];
+
+    console.log(response);
+
+    var width = 800,
+    height = 250,
+    radius = Math.min(width, height) / 2;
+
+    var color = d3.scale.ordinal()
+        .range(["#00aa00", "#55aa00", "#aa5500", "#aa0000"]);
+
+    var arc = d3.svg.arc()
+        .outerRadius(radius - 50)
+        .innerRadius(radius - 70);
+
+    var pie = d3.layout.pie()
+        .sort(null)
+        .value(function (d) {
+        return d.tally;
+    });
+
+    var svg = d3.select("#vizArea").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        var g = svg.selectAll(".arc")
+            .data(pie(data))
+            .enter().append("g")
+            .attr("class", "arc");
+
+        g.append("path")
+            .attr("d", arc)
+            .style("fill", function (d) {
+            return color(d.data.context);
+        });
+
+        g.append("text")
+            .attr("transform", function (d) {
+                return "translate(" + arc.centroid(d) + ")";
+            })
+            .attr("dy", ".35em")
+            .style("text-anchor", "middle")
+            .text(function (d) {
+                return d.data.context;
+            });
+    });  
+}
