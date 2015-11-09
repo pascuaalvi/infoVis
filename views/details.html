@@ -7,15 +7,16 @@
 		<script type="text/javascript" src="http://d3js.org/topojson.v0.min.js"></script>
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>		
 		<script type="text/javascript" src='/scripts/details.js'></script>
-		<link rel="stylesheet" type="text/css" href="/stylesheets/buttons.css">
+		<link rel="stylesheet" type="text/css" href="/stylesheets/buttons.css">		
+		<link rel="stylesheet" type="text/css" href="/stylesheets/bar-chart.css">
 	</head>
 	<body>
 		<div id="container" style="width: 100%; overflow: hidden;">
-			<h1>PISA 2012: {{countrySelected}}<h2>
+			<h1>PISA 2012: {{countrySelected}}<h1>
 			<h1 id="countryName" style ="display: none;">{{countrySelected}}</h1>
 			<div id="tooltip" class="hidden">
 			    <p><strong id="importantLabel"></strong></p>
-			    <p><span id="value"></span>%</p>
+			    <p><span id="value"></span></p>
 			</div>
 			<div id="vizButtons" style="width: 25.5%; height: 625px; display: table-cell; float: left">
 				<br></br>
@@ -25,14 +26,14 @@
 				<br><br>
 				<input type="button" class="button" value="Effect of Sports Presence" onclick="pie('sports')">
 				<br><br>
+				<input type="button" class="button" value="Effect of Arts Presence" onclick="pie('arts')">
+				<br><br>
 				<input type="button" class="button" value="Co-Ed vs Segregated Schools" onclick="pie('gender')">
 				<br><br>
 				<input type="button" class="button" value="Private vs Public Schools" onclick="pie('type')">
 				<br><br>
-				<input type="button" class="button" value="Effect of Arts Presence" onclick="pie('arts')">
-				<br><br>
 			</div>
-			<div id="vizArea" style="width: 70.5%; height: 625px; display: table-cell;"></div>
+			<div id="vizArea" style="width: .5%; height: 625px; display: table-cell;"></div>
 		</div>
 	</body>
 </html>

@@ -63,18 +63,16 @@ router.get('/data', function (req, res) {
         }
         else if(context === "location"){
           countrydata = {
-            cp: row.SmallTownPassed, 
-            cf: row.SmallTownFailed, 
-            ncp: row.CityPassed, 
-            ncf: row.CityFailed,
-            cp: row.VillagePassed, 
-            cf: row.VillageFailed, 
-            ncp: row.CityPassed, 
-            ncf: row.CityFailed,            
-            cp: row.TownPassed, 
-            cf: row.TownFailed, 
-            ncp: row.LargeCityPassed, 
-            ncf: row.LargeCityFailed
+            stp: row.SmallTownPassed, 
+            stf: row.SmallTownFailed, 
+            cp: row.CityPassed, 
+            cf: row.CityFailed,
+            vp: row.VillagePassed, 
+            vf: row.VillageFailed,           
+            tp: row.TownPassed, 
+            tf: row.TownFailed, 
+            lcp: row.LargeCityPassed, 
+            lcf: row.LargeCityFailed
           };
         }
 

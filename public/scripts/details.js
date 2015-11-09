@@ -52,6 +52,9 @@ function pie(context){
     var total1 = 0;
     var total2 = 0;
 
+    var text1 = "";
+    var text2 = "";
+
     if(context === "gender"){
       var data1 = [
         {"context":"Coed School - Passed","tally": array["cp"]},
@@ -65,6 +68,8 @@ function pie(context){
 
         total1 = array["cp"]+array["cf"];
         total2 = array["ncp"]+array["ncf"];
+        text1 = "Coed Schools";
+        text2 = "Segregated Schools";
     }
     else if(context === "type"){
       var data1 = [
@@ -79,6 +84,10 @@ function pie(context){
 
         total1 = array["pPrivate"]+array["fPrivate"];
         total2 = array["pPublic"]+array["fPublic"];
+
+
+        text1 = "Private Schools";
+        text2 = "Public Schools";
     }
     else if(context === "sports"){
       var data1 = [
@@ -93,6 +102,10 @@ function pie(context){
 
         total1 = array["sp"]+array["sf"];
         total2 = array["nsp"]+array["nsf"];
+
+
+        text1 = "Schools with Sport Clubs";
+        text2 = "Schools without Sport Clubs";
     }
     else if(context === "arts"){
       var data1 = [
@@ -107,6 +120,10 @@ function pie(context){
 
         total1 = array["ap"]+array["af"];
         total2 = array["nap"]+array["naf"];
+
+
+        text1 = "Schools with Art Clubs";
+        text2 = "Schools without Art Clubs";
     }
     
 
@@ -161,7 +178,7 @@ function pie(context){
           .style("top", d3.event.pageY + "px")
           .style("opacity", 1)
           .select("#value")
-          .text(Math.round((d.value/total1)*100));
+          .text(Math.round((d.value/total1)*100)+"%");
         d3.select("#tooltip")
           .select("#importantLabel")
           .text(d.data.context)
@@ -214,7 +231,7 @@ function pie(context){
           .style("top", d3.event.pageY + "px")
           .style("opacity", 1)
           .select("#value")
-          .text(Math.round((d.value/total2)*100));
+          .text(Math.round((d.value/total2)*100)+"%");
         d3.select("#tooltip")
           .select("#importantLabel")
           .text(d.data.context)
@@ -251,7 +268,17 @@ function pie(context){
           return d.data.tally;
         });
 
-        // END
+    var label1 = svg1.append("text")
+      .attr("text-anchor", "middle")
+      .attr("fill", "black")
+      .text(text1)
+
+    var label2 = svg2.append("text")
+      .attr("text-anchor", "middle")
+      .attr("fill", "black")
+      .text(text2)
+
+    // END
   });  
 }
 
@@ -260,10 +287,127 @@ function bar(){
   var vis = d3.select("#vizArea").selectAll("*").remove(); 
   var aClient = new HttpClient();
 
+  var svg = d3.select("#vizArea")
+    .append("svg")
+      .attr("class","chart")
+      .attr("id","svg-bar")
+      .attr("width", "100%")
+      .attr("height", "100%");
+
   aClient.get("/data?country='"+country+"'&context=location", function (response) {
     
+    console.log(response);
+
     var array = JSON.parse(response);
 
+    var data = [
+      {"context":"Passed in a school located in a Large City"  ,"tally": array["lcp"], "location": "Large City"},
+      {"context":"Failed in a school located in a Large City"  ,"tally": array["lcf"], "location": "Large City"},
+      {"context":"Passed in a school located in a City"        ,"tally": array["cp"],  "location": "City"},
+      {"context":"Failed in a school located in a City"        ,"tally": array["cf"],  "location": "City"},
+      {"context":"Passed in a school located in a Town"        ,"tally": array["tp"],  "location": "Town"},
+      {"context":"Failed in a school located in a Town"        ,"tally": array["tf"],  "location": "Town"},
+      {"context":"Passed in a school located in a Small Town"  ,"tally": array["stp"], "location": "Small Town"},
+      {"context":"Failed in a school located in a Small Town"  ,"tally": array["stf"], "location": "Small Town"},
+      {"context":"Passed in a school located in a Village"     ,"tally": array["vp"],  "location": "Village"},
+      {"context":"Failed in a school located in a Village"     ,"tally": array["vf"],  "location": "Village"}
+    ];
 
+    total = array["lcp"]+array["lcf"]+array["cp"]+array["cf"]+array["tp"]+array["tf"]+array["stp"]+array["stf"]+array["vp"]+array["vf"];
+
+    var line = svg.append("line")
+      .attr("x1", 300)
+      .attr("y1", 10)
+      .attr("x2", 300)
+      .attr("y2", 800)
+      .attr("stroke","gray")
+      .attr("stroke-width", 2);
+
+
+      for( var i = 0 ; i < data.length ; i++ ){
+        var obj = data[i];
+
+        var context = obj["context"];
+        var tally = obj["tally"];
+        var location = obj["location"];
+
+        var offset = 0;
+
+        if((i % 2) === 0){
+          offset = 47.5
+        }
+        else{
+          offset = 42.5
+
+          // Y Axis Label
+          var text = svg.append("text")
+              .attr("transform", function (d) {
+                return "translate(250,"+((55 * i) + offset)+")";
+              })
+              .attr("text-anchor", "middle")
+              .attr("fill", "black")
+              .text(location)
+        }
+
+        var rect = svg.append("rect")
+          .attr("x", 301)
+          .attr("y", (55 * i) + offset)
+          .attr("width", 1)
+          .attr("height", 50)
+          .attr("fill",function(){
+            if((i % 2) === 0){
+              return "rgb(41,184,0)"
+            }
+            else{
+              return "rgb(255,41,0)"
+            }
+          })
+          .attr("stroke","white")
+          .transition()
+            .attr("width", (obj["tally"]/total)* 3000)
+            .duration(1000)
+
+          var text = svg.append("text")
+              .attr("transform", function (d) {
+                return "translate(320,"+((55 * i) + offset + 29)+")";
+              })
+              .attr("text-anchor", "middle")
+              .attr("fill", "black")
+              .text(tally)
+          
+      }
+
+    // END
   });
+
+  var legend1 = svg.append("rect")
+      .attr("x", 10)
+      .attr("y", 10)
+      .attr("width", 50)
+      .attr("height", 50)
+      .attr("fill","rgb(255,41,0)")
+      .attr("stroke","black")
+
+  var legend1 = svg.append("rect")
+      .attr("x", 10)
+      .attr("y", 61)
+      .attr("width", 50)
+      .attr("height", 50)
+      .attr("fill","rgb(41,184,0)")
+      .attr("stroke","black")
+
+  var text1 = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(65,40)";
+    })
+    .attr("fill", "black")
+    .text("Students on Track")
+
+  var text2 = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(65, 91)";
+    })
+    .attr("fill", "black")
+    .text("Students behind")
+
 }

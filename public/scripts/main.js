@@ -41,7 +41,7 @@ var projection = d3.geo.mercator();
 var path = d3.geo.path().projection(projection);
 
 var g = canvas.append("g");
-g.attr("transform","translate(-18,190)scale(1)");
+g.attr("transform","translate(125,220)scale(1)");
 g.selectAll("path")  
             .attr("d", path.projection(projection));
 
@@ -163,8 +163,8 @@ var zoom = d3.behavior.zoom()
     .on("zoom",function() {
         var coord = d3.event.translate;
         if(pastScale == d3.event.scale || initial){
-          var x = coord[0] + -18;
-          var y = coord[1] + 190;
+          var x = coord[0] + 125;
+          var y = coord[1] + 220;
           coord = [x,y];
           initial = false;
         }
