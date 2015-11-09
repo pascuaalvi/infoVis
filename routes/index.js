@@ -75,6 +75,29 @@ router.get('/data', function (req, res) {
             lcf: row.LargeCityFailed
           };
         }
+        else if(context === "sportsArtsType"){
+          countrydata = {
+            PrivateSportArtsPassed : row.PrivateSportArtsPassed,
+            PrivateSportArtsFailed : row.PrivateSportArtsFailed,
+            PublicSportArtsPassed : row.PublicSportArtsPassed,
+            PublicSportArtsFailed : row.PublicSportArtsFailed, 
+
+            PrivateSportPassed : row.PrivateSportPassed,
+            PrivateSportFailed : row.PrivateSportFailed,
+            PublicSportPassed : row.PublicSportPassed,
+            PublicSportFailed : row.PublicSportFailed, 
+
+            PrivateArtsPassed : row.PrivateArtsPassed,
+            PrivateArtsFailed : row.PrivateArtsFailed,
+            PublicArtsPassed : row.PublicArtsPassed,
+            PublicArtsFailed : row.PublicArtsFailed, 
+
+            PrivateNonePassed : row.PrivateNonePassed,
+            PrivateNoneFailed : row.PrivateNoneFailed,
+            PublicNonePassed : row.PublicNonePassed,
+            PublicNoneFailed : row.PublicNoneFailed
+          };
+        }
 
       }, function(){
         res.send(countrydata);

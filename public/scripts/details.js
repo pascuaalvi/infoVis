@@ -129,7 +129,7 @@ function pie(context){
 
     //console.log(response);
 
-    var width = 1200,
+    var width = 950,
     height = 500,
     radius = Math.min(width, height) / 2;
 
@@ -319,7 +319,7 @@ function bar(){
       .attr("x1", 300)
       .attr("y1", 10)
       .attr("x2", 300)
-      .attr("y2", 800)
+      .attr("y2", 550)
       .attr("stroke","gray")
       .attr("stroke-width", 2);
 
@@ -342,7 +342,7 @@ function bar(){
           // Y Axis Label
           var text = svg.append("text")
               .attr("transform", function (d) {
-                return "translate(250,"+((55 * i) + offset)+")";
+                return "translate(250,"+((45 * i) + offset)+")";
               })
               .attr("text-anchor", "middle")
               .attr("fill", "black")
@@ -351,9 +351,9 @@ function bar(){
 
         var rect = svg.append("rect")
           .attr("x", 301)
-          .attr("y", (55 * i) + offset)
+          .attr("y", (45 * i) + offset)
           .attr("width", 1)
-          .attr("height", 50)
+          .attr("height", 45)
           .attr("fill",function(){
             if((i % 2) === 0){
               return "rgb(41,184,0)"
@@ -369,7 +369,7 @@ function bar(){
 
           var text = svg.append("text")
               .attr("transform", function (d) {
-                return "translate(320,"+((55 * i) + offset + 29)+")";
+                return "translate(320,"+((45 * i) + offset+ 28)+")";
               })
               .attr("text-anchor", "middle")
               .attr("fill", "black")
@@ -409,5 +409,251 @@ function bar(){
     })
     .attr("fill", "black")
     .text("Students behind")
+
+}
+
+function heat(){
+  var country = $("#countryName")[0].innerText;
+  var vis = d3.select("#vizArea").selectAll("*").remove(); 
+  var aClient = new HttpClient();
+
+  var svg = d3.select("#vizArea")
+    .append("svg")
+      .attr("class","chart")
+      .attr("id","svg-bar")
+      .attr("width", "100%")
+      .attr("height", "100%");
+
+  aClient.get("/data?country='"+country+"'&context=sportsArtsType", function (response) {
+    
+    console.log(response);
+
+    var array = JSON.parse(response);
+
+        var PrivateSportArtsPassed = array["PrivateSportArtsPassed" ];
+        var PrivateSportArtsFailed = array["PrivateSportArtsFailed" ];
+        var PublicSportArtsPassed = array["PublicSportArtsPassed" ];
+        var PublicSportArtsFailed = array["PublicSportArtsFailed" ]; 
+
+        var PrivateSportPassed = array["PrivateSportPassed" ];
+        var PrivateSportFailed = array["PrivateSportFailed" ];
+        var PublicSportPassed = array["PublicSportPassed" ];
+        var PublicSportFailed = array["PublicSportFailed" ]; 
+
+        var PrivateArtsPassed = array["PrivateArtsPassed" ];
+        var PrivateArtsFailed = array["PrivateArtsFailed" ];
+        var PublicArtsPassed = array["PublicArtsPassed" ];
+        var PublicArtsFailed = array["PublicArtsFailed" ]; 
+
+        var PrivateNonePassed = array["PrivateNonePassed" ];
+        var PrivateNoneFailed = array["PrivateNoneFailed" ];
+        var PublicNonePassed = array["PublicNonePassed" ];
+        var PublicNoneFailed = array["PublicNoneFailed" ]; 
+
+        var ratioPriSA = (PrivateSportArtsPassed/(PrivateSportArtsPassed+PrivateSportArtsFailed)) * 100;
+        var ratioPubSA = (PublicSportArtsPassed/(PublicSportArtsPassed+PublicSportArtsFailed)) * 100;
+        var ratioPriS  = (PrivateSportPassed/(PrivateSportPassed+PrivateSportArtsFailed)) * 100;
+        var ratioPubS  = (PublicSportPassed/(PublicSportPassed+PublicSportArtsFailed)) * 100;
+        var ratioPriA  = (PrivateArtsPassed/(PrivateArtsPassed+PrivateSportArtsFailed)) * 100;
+        var ratioPubA  = (PublicArtsPassed/(PublicArtsPassed+PublicSportArtsFailed)) * 100;
+        var ratioPri   = (PrivateNonePassed/(PrivateNonePassed+PrivateNoneFailed)) * 100;
+        var ratioPub   = (PublicNonePassed/(PublicNonePassed+PublicNoneFailed)) * 100;
+
+        for( var i = 0 ; i < 8 ; i++ ){
+          var ratio = 0;
+          if(i == 0){
+            ratio = ratioPriSA;
+          }
+          else if(i == 1){
+            ratio = ratioPubSA;
+          }
+          else if(i == 2){
+            ratio = ratioPriS;
+          }
+          else if(i == 3){
+            ratio = ratioPubS;
+          }
+          else if(i == 4){
+            ratio = ratioPriA;
+          }
+          else if(i == 5){
+            ratio = ratioPubA;
+          }
+          else if(i == 6){
+            ratio = ratioPri;
+          }
+          else if(i == 7){
+            ratio = ratioPub;
+          }
+
+
+          var rect = svg.append("rect")
+            .attr("x", function(){
+              if(i % 2 == 0){
+                return 550;
+              }
+              else{
+                return 640;
+              }
+            })
+            .attr("y", function(){
+              if(i % 2 == 0){
+                return 45 * i + 50;
+              }
+              else{
+                return (45 * i) + 5;
+              }
+            })
+            .attr("width", 90)
+            .attr("height",90)
+            .attr("fill",function(){
+
+              if( ratio > 75){
+                return "rgb(0,255,0)"
+              }
+              if( ratio > 50 && ratio <= 75){
+                return "rgb(110,150,0)"
+              }
+              else if (ratio && ratio <= 50){
+                return "rgb(160,100,0)"
+              }
+              else if( ratio <= 25){
+                return "rgb(255,0,0)"
+              }
+            })
+            .attr("stroke","black")
+            .attr("stroke-width","2px")
+
+            var text = svg.append("text")
+                .attr("transform", function (d) {
+                  var x = 0;
+                  var y = 0;
+
+                  if(i % 2 == 0){
+                    x = 590;
+                  }
+                  else{
+                    x = 690;
+                  }
+
+                  if(i % 2 == 0){
+                    y = 45 * i + 70;
+                  }
+                  else{
+                    y = (45 * i) + 25;
+                  }
+
+                  return "translate("+x+","+y+")";
+                })
+                .attr("text-anchor", "middle")
+                .attr("fill", "black")
+                .text(Math.round(ratio)+"%")
+        }
+
+  });
+  
+  var legend1 = svg.append("rect")
+      .attr("x", 110)
+      .attr("y", 10)
+      .attr("width", 50)
+      .attr("height", 50)
+      .attr("fill","rgb(0,255,0)")
+      .attr("stroke","black")
+
+  var legend2 = svg.append("rect")
+      .attr("x", 110)
+      .attr("y", 61)
+      .attr("width", 50)
+      .attr("height", 50)
+      .attr("fill","rgb(110,150,0)")
+      .attr("stroke","black")
+
+  var legend3 = svg.append("rect")
+      .attr("x", 110)
+      .attr("y", 112)
+      .attr("width", 50)
+      .attr("height", 50)
+      .attr("fill","rgb(160,100,0)")
+      .attr("stroke","black")
+
+  var legend4 = svg.append("rect")
+      .attr("x", 110)
+      .attr("y", 163)
+      .attr("width", 50)
+      .attr("height", 50)
+      .attr("fill","rgb(255,0,0)")
+      .attr("stroke","black")
+
+  var text1 = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(165,40)";
+    })
+    .attr("fill", "black")
+    .text("Over 75% are in ISCEDL 3")
+
+  var text2 = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(165, 91)";
+    })
+    .attr("fill", "black")
+    .text("Over 50% are in ISCEDL 3")
+
+    var text3 = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(165,142)";
+    })
+    .attr("fill", "black")
+    .text("Over 25% are in ISCEDL 3")
+
+  var text4 = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(165, 193)";
+    })
+    .attr("fill", "black")
+    .text("Under 25% are in ISCEDL 3")
+
+    //LABELS
+    var label = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(450,95)";
+    })
+    .attr("fill", "black")
+    .text("Sports & Arts")
+
+    var label = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(450,185)";
+    })
+    .attr("fill", "black")
+    .text("Sports Only")
+
+    var label = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(450,275)";
+    })
+    .attr("fill", "black")
+    .text("Arts Only")
+
+    var label = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(450,365)";
+    })
+    .attr("fill", "black")
+    .text("Neither")
+
+    var label = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(570,20)";
+    })
+    .attr("fill", "black")
+    .text("Private")
+
+    var label = svg.append("text")
+    .attr("transform", function (d) {
+      return "translate(670,20)";
+    })
+    .attr("fill", "black")
+    .text("Public")
+
 
 }

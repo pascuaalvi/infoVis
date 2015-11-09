@@ -1,10 +1,20 @@
-body { text-align: center; padding: 40px; background: #F5F5F5; }
+
+
+body { 
+  /*padding: 40px;*/ 
+  background: #F5F5F5; }
 .container { width: 500px; text-align: center; margin: auto;}
 .copyright { margin-top: 50px; font-size: 12px; text-transform: uppercase; }
 .copyright a { text-decoration: none; padding: 5px;background: #c0392b; color: #FFFFFF; }
 .copyright a:hover { background: transparent; color: #c0392b; }
 
+
+li {
+  line-height: 1em;
+}
+
 .button {
+  text-align: center;
   display: inline-block;
   height: 50px;
   line-height: 50px;
