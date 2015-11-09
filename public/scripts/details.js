@@ -49,6 +49,9 @@ function pie(context){
     var data1 = [];
     var data2 = [];
 
+    var total1 = 0;
+    var total2 = 0;
+
     if(context === "gender"){
       var data1 = [
         {"context":"Coed School - Passed","tally": array["cp"]},
@@ -59,6 +62,9 @@ function pie(context){
         {"context":"Segregated School - Passed","tally": array["ncp"]},
         {"context":"Segregated School - Failed","tally": array["ncf"]}
         ];
+
+        total1 = array["cp"]+array["cf"];
+        total2 = array["ncp"]+array["ncf"];
     }
     else if(context === "type"){
       var data1 = [
@@ -70,6 +76,9 @@ function pie(context){
         {"context":"Public School - Passed","tally": array["pPublic"]},
         {"context":"Public School - Failed","tally": array["fPublic"]}
         ];
+
+        total1 = array["pPrivate"]+array["fPrivate"];
+        total2 = array["pPublic"]+array["fPublic"];
     }
     else if(context === "sports"){
       var data1 = [
@@ -81,6 +90,9 @@ function pie(context){
         {"context":"School doesn't have Sport Clubs - Passed","tally": array["nsp"]},
         {"context":"School doesn't have Sport Clubs - Failed","tally": array["nsf"]}
         ];
+
+        total1 = array["sp"]+array["sf"];
+        total2 = array["nsp"]+array["nsf"];
     }
     else if(context === "arts"){
       var data1 = [
@@ -92,10 +104,13 @@ function pie(context){
         {"context":"School doesn't have Art Clubs - Passed","tally": array["nap"]},
         {"context":"School doesn't have Art Clubs - Failed","tally": array["naf"]}
         ];
+
+        total1 = array["ap"]+array["af"];
+        total2 = array["nap"]+array["naf"];
     }
     
 
-    console.log(response);
+    //console.log(response);
 
     var width = 1200,
     height = 500,
@@ -139,14 +154,23 @@ function pie(context){
     var g = svg1.selectAll(".arc")
       .data(pie(data1))
       .enter().append("g")
-      .attr("class", "arc");
-      // .on("mouseover", function (d) {
-      //   d3.select("#tooltip")
-      //       .style("left", d3.event.pageX + "px")
-      //       .style("top", d3.event.pageY + "px")
-      //       .style("opacity", 1)
-      //       .select("#value")
-      //       .text(d.value);
+      .attr("class", "arc")
+      .on("mouseover", function (d) {
+        d3.select("#tooltip")
+          .style("left", d3.event.pageX + "px")
+          .style("top", d3.event.pageY + "px")
+          .style("opacity", 1)
+          .select("#value")
+          .text(Math.round((d.value/total1)*100));
+        d3.select("#tooltip")
+          .select("#importantLabel")
+          .text(d.data.context)
+        })
+      .on("mouseout", function () {
+        // Hide the tooltip
+        d3.select("#tooltip")
+          .style("opacity", 0)
+        });
 
         g.append("path")
             .style("fill", function (d) {
@@ -183,14 +207,23 @@ function pie(context){
     var g2 = svg2.selectAll(".arc")
       .data(pie(data2))
       .enter().append("g")
-      .attr("class", "arc");
-      // .on("mouseover", function (d) {
-      //   d3.select("#tooltip")
-      //       .style("left", d3.event.pageX + "px")
-      //       .style("top", d3.event.pageY + "px")
-      //       .style("opacity", 1)
-      //       .select("#value")
-      //       .text(d.value);
+      .attr("class", "arc")
+      .on("mouseover", function (d) {
+        d3.select("#tooltip")
+          .style("left", d3.event.pageX + "px")
+          .style("top", d3.event.pageY + "px")
+          .style("opacity", 1)
+          .select("#value")
+          .text(Math.round((d.value/total2)*100));
+        d3.select("#tooltip")
+          .select("#importantLabel")
+          .text(d.data.context)
+      })
+      .on("mouseout", function () {
+        // Hide the tooltip
+        d3.select("#tooltip")
+          .style("opacity", 0)
+        });
 
         g2.append("path")
             .style("fill", function (d) {
